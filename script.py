@@ -111,14 +111,14 @@ def custom_generate_chat_prompt(user_input, state, **kwargs):
     response_text = []
     question = "Develop a plan to answer the following user input:" + str(user_input)         
     if logging == True:
-        print(str(question))
+        print("Question: " +str(question))
     for response in generate_reply(question, state, is_chat=False, escape_html=False, for_ui=False):
         response_text.append(response) 
     if logging == True:
-        print(str(response_text[-1]))
+        print("Initial Plan: " +str(response_text[-1]))
     theplan = str(question) + str(response_text[-1]) + ". Analyze this plan and provide insights for you to make a final answer."
     if logging == True:
-        print(str(theplan))
+        print("Final Plan: " +str(theplan))
     #Analyze the plan
     response_text = []
     for response in generate_reply(theplan, state, is_chat=False, escape_html=False, for_ui=False):
@@ -127,14 +127,7 @@ def custom_generate_chat_prompt(user_input, state, **kwargs):
     if logging == True:    
         print(str(response_text[-1]))
     final_answer = "Use all of the following data to answer the users question: " + str(user_input) + ". " + str(response_text[-1])
-    if logging == True:
-        print(str(final_answer))
-    response_text = []
-    for response in generate_reply(final_answer, state, is_chat=False, escape_html=False, for_ui=False):
-        response_text.append(response) 
-    if logging == True:
-        print(str(response_text[-1]))
-    result = str(response_text[-1])
+    result = chat.generate_chat_prompt(final_answer, state, **kwargs)
     return result
 
 def custom_css():
